@@ -1,6 +1,6 @@
 # ⚡ Power Demand Prediction Pipeline
 
-A machine learning pipeline to forecast next-hour electricity demand (in MW) using historical power data, weather variables, and macroeconomic indicators. Built with XGBoost and tuned via Optuna, achieving a **MAPE of ~2.89%** on the validation set.
+A machine learning pipeline to forecast next-hour electricity demand (in MW) using historical power data, weather variables, and macroeconomic indicators. Built with XGBoost and tuned via Optuna, achieving a **MAPE of ~2.76%** on the validation set.
 
 ---
 
