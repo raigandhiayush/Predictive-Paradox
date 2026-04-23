@@ -89,13 +89,14 @@ See [Feature Engineering](#feature-engineering) section below.
 ### Step 4 — Train/Validation Split
 A strict **temporal split** is used — no random shuffling — to prevent data leakage:
 - **Training set:** All data before `2024-01-01`
+- **TimeSeriesSplit:** Used timeseriessplit on the training set train model better reduce overfitting
 - **Validation set:** All data from `2024-01-01` onwards
 
 ### Step 5 — Training
-Trains an `XGBRegressor` with the best hyperparameters found via Optuna (100 trials). See [Model & Hyperparameter Tuning](#model--hyperparameter-tuning).
+Trains an `LightGBM` with the best hyperparameters found via Optuna (200 trials). See [Model & Hyperparameter Tuning](#model--hyperparameter-tuning).
 
 ### Step 6 — Evaluate & Visualize
-Computes MAPE and MAE on the validation set, prints feature importances, and saves two diagnostic plots.
+Computes MAPE, MAE and RMSE on the validation set, prints feature importances, and saves two diagnostic plots.
 
 ---
 
@@ -177,11 +178,11 @@ Since the task is forecasting the *next* hour's demand, care is taken to ensure 
 
 | Rank | Feature | Importance |
 |---|---|---|
-| 1 | `demand_mw` (current) | 77.2% |
-| 2 | `lag_1` | 13.5% |
-| 3 | `lag_24` | 2.0% |
-| 4 | `generation_mw` | 1.2% |
-| 5 | `hour_cos` | 1.2% |
+| 1 | `demand_mw` (current) | 686 |
+| 2 | `hour_sin` | 578 |
+| 3 | `hour_cos` | 456 |
+| 4 | `lag_24` | 423 |
+| 5 | `demand_trend` | 398 |
 
 ---
 
@@ -195,13 +196,14 @@ Since the task is forecasting the *next* hour's demand, care is taken to ensure 
 
 | Parameter | Value |
 |---|---|
-| `n_estimators` | 1000 |
-| `max_depth` | 10 |
-| `learning_rate` | 0.013608000918343289 |
-| `subsample` | 0.8174070749139737 |
-| `colsample_bytree` | 0.969962445473179 |
+| `n_estimators` | 680 |
+| `max_depth` | 8 |
+| `learning_rate` | 0.11291399451070712 |
+| `subsample` | 0.5736263742244695 |
+| `colsample_bytree` | 0.9471080238216911 |
+| `num_leaves` | 10 |
 
-The search space was: `n_estimators` ∈ [100, 1000], `max_depth` ∈ [3, 10], `learning_rate` ∈ [0.01, 0.3], `subsample` ∈ [0.5, 1.0], `colsample_bytree` ∈ [0.5, 1.0].
+The search space was: `n_estimators` ∈ [100, 1000], `max_depth` ∈ [3, 10], `learning_rate` ∈ [0.01, 0.3], `subsample` ∈ [0.5, 1.0], `colsample_bytree` ∈ [0.5, 1.0], `num_leaves` ∈ [2,256]
 
 ---
 
@@ -209,10 +211,11 @@ The search space was: `n_estimators` ∈ [100, 1000], `max_depth` ∈ [3, 10], `
 
 | Metric | Value |
 |---|---|
-| **MAPE** | ~2.76% |
-| **MAE** | 237.10 MW |
+| **MAPE** | ~2.79% |
+| **MAE** | 239.89 MW |
+| **RMSE** | 446.14 MW |
 
-A MAPE of ~2.76% means the model's hourly demand forecasts are off by less than 3% on average — strong performance for a short-term energy forecasting task.
+A MAPE of ~2.79% means the model's hourly demand forecasts are off by less than 3% on average — strong performance for a short-term energy forecasting task.
 
 ---
 
