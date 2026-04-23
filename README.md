@@ -245,7 +245,7 @@ pip install pandas numpy matplotlib seaborn scikit-learn xgboost openpyxl optuna
 
 ### Run the notebook
 
-Open `Power_demand_predict.ipynb` in Jupyter or Google Colab. The notebook was originally developed on Colab with a T4 GPU. Run cells top-to-bottom; Optuna tuning runs 100 trials and will take several minutes.
+Open `Power_demand_predict.ipynb` in Jupyter or Google Colab. The notebook was originally developed on Colab with a T4 GPU. Run cells top-to-bottom; Optuna tuning runs 200 trials and will take several minutes.
 
 ---
 
